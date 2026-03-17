@@ -1,17 +1,10 @@
-from pydantic import BaseModel, Field
+from sqlalchemy import Column, Integer, String
+from .database import Base
 
-class Student(BaseModel):
-    id: int
-    name: str = Field(..., min_length=2)
-    age: int = Field(..., gt=15)
-    course: str
+class Student(Base):
+    __tablename__ = "students"
 
-
-class StudentResponse(BaseModel):
-    message: str
-    student: Student
-
-
-class UserLogin(BaseModel):
-    username: str
-    password: str
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    age = Column(Integer)
+    course = Column(String)

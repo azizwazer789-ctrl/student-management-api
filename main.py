@@ -6,7 +6,26 @@ from models import Student, StudentResponse, UserLogin
 from database import students_db
 from auth import authenticate_user
 
+from fastapi import FastAPI
+from database import Base, engine
+from routes import student
+
+from sqlalchemy import Column, Integer, String
+# No dot here! This is an absolute import.
+from database import Base
+
+class Student(Base):
+    __tablename__ = "students"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    age = Column(Integer)
+    course = Column(String)
+
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI(title="Student Management API")
+app.include_router(student.router)
 
 
 # Global Exception Handler
@@ -83,4 +102,4 @@ def delete_student(student_id: int):
     raise HTTPException(
         status_code=404,
         detail="Student not found"
-    )
+)
